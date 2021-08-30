@@ -4,11 +4,12 @@ import VariablesContextProvider from "./contexts/variables";
 import { client } from "./ApolloClient/client";
 import { ApolloProvider } from "@apollo/client";
 
-import Navbar from "./Navbar";
-import FooterMobile from "./FooterMobile";
+import Navbar from "./components/Navbar";
+import FooterMobile from "./components/FooterMobile";
 import Home from "./Home";
 import PokeDetail from "./PokeDetail";
 import NotFound from "./NotFound";
+import MyPokemon from "./MyPokemon";
 
 function App() {
   return (
@@ -21,14 +22,17 @@ function App() {
               <Route exact path="/">
                 <Home />
               </Route>
-              <Route path="/detail/:pokename">
+              <Route path="/detail/:pokename/:idPokemon">
                 <PokeDetail />
+              </Route>
+              <Route path="/inventory">
+                <MyPokemon />
               </Route>
               <Route path="*">
                 <NotFound />
               </Route>
             </Switch>
-            <FooterMobile />
+            {/* <FooterMobile /> */}
           </VariablesContextProvider>
         </ApolloProvider>
       </div>

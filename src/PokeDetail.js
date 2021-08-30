@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { Link, useParams, useHistory, useLocation } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
 import { css } from "@emotion/css";
 import { VariablesContext } from "./contexts/variables";
@@ -30,13 +30,13 @@ const POKEMON_DETAIL = gql`
   }
 `;
 
-const PokeDetail = () => {
+const PokeDetail = (props) => {
   let history = useHistory();
   const [loading_catch, setLoadingCatch] = useState(false);
   const [isCatch, setIsCatch] = useState(false);
   const [namePokemon, setNamePokemon] = useState("");
-  const [localData, setlocalData] = useState();
-  const { pokename } = useParams();
+  // const [localData, setlocalData] = useState();
+  const { pokename, idPokemon } = useParams();
   const { variables } = useContext(VariablesContext);
   const { loading, error, data } = useQuery(POKEMON_DETAIL, {
     variables: { pokename },
@@ -45,12 +45,12 @@ const PokeDetail = () => {
   useEffect(() => {
     setTimeout(() => {
       setLoadingCatch(false);
-    }, 5000);
+    }, 3000);
   }, [loading_catch]);
 
-  useEffect(() => {
-    setlocalData(JSON.parse(localStorage.getItem("data")));
-  }, [namePokemon]);
+  // useEffect(() => {
+  //   setlocalData(JSON.parse(localStorage.getItem("data")));
+  // }, [namePokemon]);
 
   const catchPokemon = () => {
     setLoadingCatch(true);
@@ -66,7 +66,8 @@ const PokeDetail = () => {
     e.preventDefault();
     let arr = [];
     let isNull = localStorage.getItem("data");
-    let name = { pokeType: `${pokename}`, name: `${namePokemon}` };
+    let lastID = JSON.parse(isNull);
+    let name = { id: `${lastID === null ? "0" : lastID.length}`, pokeType: `${pokename}`, name: `${namePokemon}` };
 
     if (isNull === null) {
       arr.push(name);
@@ -148,8 +149,95 @@ const PokeDetail = () => {
             padding: 30px 0px;
           `}
         >
-          <h1>Pokemon Name : {data.pokemon.name}</h1>
-          <p>Ini: </p>
+          <div
+            className={css`
+              ${variables.box_shadow}
+              background-color: #fff;
+              border-radius: 20px;
+              background: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${idPokemon}.png;
+            `}
+          >
+            <div
+              className={css`
+                ${variables.row}
+                padding: 24px;
+              `}
+            >
+              <div
+                className={css`
+                  ${variables.detail.image}
+                  ${variables.col_6}
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                `}
+              >
+                <img
+                  className={css`
+                    width: 200px;
+                  `}
+                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${idPokemon}.png`}
+                  alt=""
+                />
+              </div>
+              <div
+                className={css`
+                  ${variables.detail.content}
+                  ${variables.col_6}
+                `}
+              >
+                <h1
+                  className={css`
+                    text-transform: uppercase;
+                  `}
+                >
+                  {data.pokemon.name}
+                </h1>
+                <h1>Moves:</h1>
+                <div
+                  className={css`
+                    display: flex;
+                    width: 100%;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                  `}
+                >
+                  {data.pokemon.moves.map((item, index) => (
+                    <span
+                      className={css`
+                        ${variables.small_label}
+                        padding-left: 4px;
+                      `}
+                      key={index}
+                    >
+                      {item.move.name}
+                    </span>
+                  ))}
+                </div>
+                <h1>Type:</h1>
+                <div
+                  className={css`
+                    display: flex;
+                    width: 100%;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                  `}
+                >
+                  {data.pokemon.types.map((item, index) => (
+                    <span
+                      className={css`
+                        ${variables.small_label}
+                        padding-left: 4px;
+                      `}
+                      key={index}
+                    >
+                      {item.type.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
           <button
             className={css`
               ${variables.btn_primary}
@@ -158,12 +246,6 @@ const PokeDetail = () => {
           >
             Catch Pokemon
           </button>
-          <p>Pokemon Moves:</p>
-          <div>
-            {data.pokemon.moves.map((item, index) => (
-              <p key={index}>{item.move.name}</p>
-            ))}
-          </div>
           <Link
             to="/"
             className={css`

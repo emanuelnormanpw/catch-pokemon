@@ -14,7 +14,7 @@ const VariablesContextProvider = (props) => {
   const card_wrapper = `
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        ${media(720, "grid-template-columns: repeat(auto-fit, minmax(288px, 1fr));")};
+        ${media(768, "grid-template-columns: repeat(auto-fit, minmax(288px, 1fr));")};
         gap: 2rem;
         padding: 0;
         list-style-type: none;
@@ -63,7 +63,7 @@ const VariablesContextProvider = (props) => {
         justify-content: center;  
         align-items: center; 
         height: calc(100vh - 154px);
-        ${media(720, "height: calc(100vh - 275px);")};
+        ${media(768, "height: calc(100vh - 275px);")};
     `;
   const err404Img = `
         width: 100%;
@@ -101,15 +101,49 @@ const VariablesContextProvider = (props) => {
     `;
 
   const footer_mobile = `
-        ${media(720, "display: block;")};
+        ${media(768, "display: block;")};
         display: none;
         position: fixed;
         left: 0;
-        bottom: 0;
+        bottom: 25px;
         width: 100%;
         color: white;
         text-align: center;
         height: 80px;
+  `;
+
+  const row = `
+        display: flex;
+        ${media(768, "display: block;")};
+  `;
+
+  const col_6 = `
+        width: 50%; 
+        ${media(768, "width: 100%;")};
+  `;
+
+  const card_detail_pokemon = `
+        ${media(768, "border-radius: 16px 16px 0px 0px;")};
+        border-radius: 16px 0px 0px 16px;
+        padding: 16px 0px;
+  `;
+
+  const card_content_pokemon = `
+        border-radius: 0px 16px 16px 0px;
+        ${media(768, "border-radius: 0px 0px 16px 16px;")};
+        padding: 16px 0px;
+  `;
+
+  const box_shadow = `
+        box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);
+  `;
+
+  const small_label = `
+        border-radius: 8px;
+        padding: 4px;
+        margin: 4px;
+        background-color: ${primary};
+        font-weight: 600;
   `;
 
   const bg_navbar = "linear-gradient(to top, rgb(0 0 0 / 0%), rgb(251 222 68 / 100%))";
@@ -126,10 +160,15 @@ const VariablesContextProvider = (props) => {
       wrapper: err404,
       img: err404Img,
     },
+
     loading: poke_loading,
+
     navbar: {
       bg_navbar: bg_navbar,
     },
+
+    box_shadow: box_shadow,
+
     text: {
       primary: {
         color: primary,
@@ -140,6 +179,12 @@ const VariablesContextProvider = (props) => {
         hover: secondaryHover,
       },
     },
+
+    detail: {
+      image: card_detail_pokemon,
+      content: card_content_pokemon,
+    },
+
     card: {
       wrapper: card_wrapper,
       card: card_pokemon_list,
@@ -149,7 +194,12 @@ const VariablesContextProvider = (props) => {
       body: card_body,
       hover: card_hover,
     },
+
+    small_label: small_label,
+
     footer_mobile: footer_mobile,
+    row: row,
+    col_6: col_6,
   });
   return <VariablesContext.Provider value={{ variables }}>{props.children}</VariablesContext.Provider>;
 };

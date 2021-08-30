@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { css } from "@emotion/css";
-import { VariablesContext } from "./contexts/variables";
+import { VariablesContext } from "../contexts/variables";
 
 const NavbarPoke = () => {
   const { variables } = useContext(VariablesContext);
