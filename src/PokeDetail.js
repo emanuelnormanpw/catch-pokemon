@@ -77,7 +77,7 @@ const PokeDetail = (props) => {
     if (localStrorage === null) {
       arr.push(name);
       localStorage.setItem("data", JSON.stringify(arr));
-      history.push("/");
+      history.push("/inventory");
     } else {
       // Find Duplicate Nickname
       let findDuplicateName = localStrorage.find(({ name }) => name === namePokemon);
@@ -90,7 +90,7 @@ const PokeDetail = (props) => {
         arr = JSON.parse(localStorage.getItem("data"));
         arr.push(name);
         localStorage.setItem("data", JSON.stringify(arr));
-        history.push("/");
+        history.push("/inventory");
       }
     }
   };
