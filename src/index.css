@@ -25,6 +25,13 @@ body {
   height: 100%;
 }
 
+button {
+  font-family: "pixel-bold";
+}
+input {
+  font-family: "pixel-bold";
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
@@ -36,13 +43,15 @@ code {
 .font-bold {
   font-family: "pixel-bold";
 }
-/* @media (max-width: 720px) {
+
+@media (max-width: 768px) {
   .homepage {
-    height: calc(100vh - 235px) !important;
+    height: calc(100vh - 79px) !important;
   }
-} */
+}
+
 .homepage {
-  height: calc(100vh - 154px);
+  height: calc(100vh - 150px);
   overflow: scroll;
 }
 

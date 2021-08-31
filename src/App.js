@@ -32,7 +32,7 @@ function App() {
                 <NotFound />
               </Route>
             </Switch>
-            {/* <FooterMobile /> */}
+            <FooterMobile />
           </VariablesContextProvider>
         </ApolloProvider>
       </div>

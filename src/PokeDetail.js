@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useParams, useHistory, useLocation } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
 import { css } from "@emotion/css";
 import { VariablesContext } from "./contexts/variables";
@@ -48,14 +48,10 @@ const PokeDetail = (props) => {
     }, 3000);
   }, [loading_catch]);
 
-  // useEffect(() => {
-  //   setlocalData(JSON.parse(localStorage.getItem("data")));
-  // }, [namePokemon]);
-
   const catchPokemon = () => {
     setLoadingCatch(true);
     const rand = Math.random();
-    if (rand > 0.1) {
+    if (rand > 0.5) {
       setIsCatch(true);
     } else {
       setIsCatch(false);
@@ -65,11 +61,19 @@ const PokeDetail = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let arr = [];
-    let isNull = localStorage.getItem("data");
-    let lastID = JSON.parse(isNull);
-    let name = { id: `${lastID === null ? "0" : lastID.length}`, pokeType: `${pokename}`, name: `${namePokemon}` };
+    let localStrorage = JSON.parse(localStorage.getItem("data"));
+    let lastID = 0;
 
-    if (isNull === null) {
+    if (localStrorage) {
+      let lastItem = localStrorage[localStrorage.length - 1];
+      if (lastItem !== undefined) {
+        lastID = parseInt(lastItem.id) + 1;
+      }
+    }
+
+    let name = { id: `${lastID}`, id_pokemon: `${idPokemon}`, pokeType: `${pokename}`, name: `${namePokemon}` };
+
+    if (localStrorage === null) {
       arr.push(name);
       localStorage.setItem("data", JSON.stringify(arr));
     } else {
@@ -119,7 +123,14 @@ const PokeDetail = (props) => {
 
   if (loading_catch) {
     return (
-      <div>
+      <div
+        className={css`
+          display: flex;
+          justify-content: center;
+          height: calc(100vh - 250px);
+          align-items: center;
+        `}
+      >
         <img
           className={css`
             ${variables.loading}
@@ -133,11 +144,67 @@ const PokeDetail = (props) => {
   if (data) {
     if (isCatch) {
       return (
-        <div>
-          <h2>POKEMON is Catched!!</h2>
+        <div
+          className={css`
+            ${variables.container}
+          `}
+        >
           <form onSubmit={handleSubmit}>
-            <input type="text" onChange={(e) => setNamePokemon(e.target.value)} />
-            <button>Add Pokemon</button>
+            <h1
+              className={css`
+                color: ${variables.secondary};
+              `}
+            >
+              !!POKEMON CATCHED!!
+            </h1>
+            <h2>Give a name:</h2>
+            <div
+              className={css`
+                display: flex;
+                justify-content: center;
+              `}
+            >
+              <input
+                type="text"
+                className={css`
+                  ${variables.form_input}
+                  margin-bottom: 24px;
+                  text-align: center;
+                  &:focus {
+                    outline: none;
+                  }
+                `}
+                placeholder="Type a name"
+                onChange={(e) => setNamePokemon(e.target.value)}
+              />
+            </div>
+            <button
+              className={css`
+                ${variables.btn_mobile}
+                @media (max-width: 768px) {
+                  margin: 8px 0px;
+                }
+                margin: 8px;
+                ${variables.btn_primary}
+              `}
+              type="submit"
+            >
+              Save Pokemon
+            </button>
+            <Link
+              to="/"
+              className={css`
+                @media (max-width: 768px) {
+                  ${variables.btn_mobile}
+                  padding: .375em 0px;
+                  margin: 8px 0px;
+                }
+                margin: 8px;
+                ${variables.btn_primary}
+              `}
+            >
+              <span className="font-bold">Release Pokemon</span>
+            </Link>
           </form>
         </div>
       );
@@ -145,8 +212,7 @@ const PokeDetail = (props) => {
       return (
         <div
           className={css`
-            margin: 0px 16px;
-            padding: 30px 0px;
+            ${variables.container}
           `}
         >
           <div
@@ -154,7 +220,6 @@ const PokeDetail = (props) => {
               ${variables.box_shadow}
               background-color: #fff;
               border-radius: 20px;
-              background: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${idPokemon}.png;
             `}
           >
             <div
@@ -189,31 +254,12 @@ const PokeDetail = (props) => {
                 <h1
                   className={css`
                     text-transform: uppercase;
+                    font-size: 50px;
+                    color: #497723;
                   `}
                 >
                   {data.pokemon.name}
                 </h1>
-                <h1>Moves:</h1>
-                <div
-                  className={css`
-                    display: flex;
-                    width: 100%;
-                    justify-content: center;
-                    flex-wrap: wrap;
-                  `}
-                >
-                  {data.pokemon.moves.map((item, index) => (
-                    <span
-                      className={css`
-                        ${variables.small_label}
-                        padding-left: 4px;
-                      `}
-                      key={index}
-                    >
-                      {item.move.name}
-                    </span>
-                  ))}
-                </div>
                 <h1>Type:</h1>
                 <div
                   className={css`
@@ -227,7 +273,6 @@ const PokeDetail = (props) => {
                     <span
                       className={css`
                         ${variables.small_label}
-                        padding-left: 4px;
                       `}
                       key={index}
                     >
@@ -235,27 +280,55 @@ const PokeDetail = (props) => {
                     </span>
                   ))}
                 </div>
+                <h1>Moves:</h1>
+                <div
+                  className={css`
+                    display: flex;
+                    width: 100%;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                  `}
+                >
+                  {data.pokemon.moves.map((item, index) => (
+                    <span
+                      className={css`
+                        ${variables.small_label}
+                      `}
+                      key={index}
+                    >
+                      {item.move.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div
+                className={css`
+                  ${variables.detail.content}
+                  ${variables.col_12}
+                `}
+              >
+                <button
+                  className={css`
+                    ${variables.btn_primary}
+                    ${variables.btn_mobile}
+                    &:hover {
+                      ${variables.btn_primary_hover}
+                    }
+                  `}
+                  onClick={catchPokemon}
+                >
+                  CATCH POKEMON
+                </button>
               </div>
             </div>
           </div>
-          <button
+          <div
             className={css`
-              ${variables.btn_primary}
+              margin: 8px 0px;
+              display: flex;
+              justify-content: space-between;
             `}
-            onClick={catchPokemon}
-          >
-            Catch Pokemon
-          </button>
-          <Link
-            to="/"
-            className={css`
-              ${variables.btn_primary} &:hover {
-                ${variables.btn_primary}
-              }
-            `}
-          >
-            Kembali
-          </Link>
+          ></div>
         </div>
       );
     }

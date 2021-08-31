@@ -29,8 +29,7 @@ const PokeList = ({ dataPokemon }) => {
   return (
     <div
       className={css`
-        margin: 0px 16px;
-        padding: 30px 0px;
+        ${variables.container}
       `}
     >
       <ul

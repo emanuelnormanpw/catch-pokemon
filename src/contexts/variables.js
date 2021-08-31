@@ -3,8 +3,8 @@ export const VariablesContext = createContext();
 
 const VariablesContextProvider = (props) => {
   const primary = "#f7cc19";
-  const primaryHover = "#ceab19";
-  const secondary = "red";
+  const primaryHover = "#efc723";
+  const secondary = "#497723";
   const secondaryHover = "red";
 
   function media(breakpoint, style) {
@@ -18,6 +18,13 @@ const VariablesContextProvider = (props) => {
         gap: 2rem;
         padding: 0;
         list-style-type: none;
+    `;
+
+  const container = `
+        margin: 0px 16px;
+        padding: 30px 0px;
+        ${media(768, "padding: 30px 0px 110px 0px;")};
+
     `;
 
   const card_pokemon_list = `
@@ -83,14 +90,28 @@ const VariablesContextProvider = (props) => {
         user-select: none;
         border: 1px solid transparent;
         padding: .375rem .75rem;
-        font-size: 1rem;
+        font-size: 1.1rem;
         line-height: 1.5;
-        border-radius: .25rem;
+        border-radius: 1rem;
+    `;
+
+  const form_input = `
+        display: block;
+        width: 100%;
+        padding: .375rem 0px;
+        font-size: 18px;
+        line-height: 1.5;
+        color: #495057;
+        font-weight: bold;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: none;
+        border-bottom: 2px solid ${primary};
     `;
 
   const btn_primary = `
         ${btn}
-        color: #465ee4;
+        color: black;
         background-color: ${primary};
         border-color: ${primary};
     `;
@@ -101,20 +122,32 @@ const VariablesContextProvider = (props) => {
     `;
 
   const footer_mobile = `
-        ${media(768, "display: block;")};
+        ${media(
+          768,
+          `display: block;
+          position: fixed;
+          left: 0;
+          bottom: 25px;
+          width: 100%;
+          color: white;
+          text-align: center;
+          height: 80px;`
+        )};
         display: none;
-        position: fixed;
-        left: 0;
-        bottom: 25px;
-        width: 100%;
-        color: white;
-        text-align: center;
-        height: 80px;
   `;
 
   const row = `
         display: flex;
+        flex-wrap: wrap;
         ${media(768, "display: block;")};
+  `;
+
+  const btn_mobile = `
+      ${media(768, "width: 100%;")};
+  `;
+
+  const col_12 = `
+        width: 100%; 
   `;
 
   const col_6 = `
@@ -140,13 +173,15 @@ const VariablesContextProvider = (props) => {
 
   const small_label = `
         border-radius: 8px;
-        padding: 4px;
+        padding: 4px 8px;
         margin: 4px;
-        background-color: ${primary};
+        color: #fff;
+        background-color: ${secondary};
         font-weight: 600;
+        text-transform: uppercase;
   `;
 
-  const bg_navbar = "linear-gradient(to top, rgb(0 0 0 / 0%), rgb(251 222 68 / 100%))";
+  const bg_navbar = `${primary}`;
   const poke_loading = "width: 80px; height: auto;";
 
   const [variables] = useState({
@@ -155,6 +190,10 @@ const VariablesContextProvider = (props) => {
 
     btn_primary: btn_primary,
     btn_primary_hover: btn_primary_hover,
+
+    btn_mobile: btn_mobile,
+
+    container: container,
 
     err404: {
       wrapper: err404,
@@ -168,6 +207,8 @@ const VariablesContextProvider = (props) => {
     },
 
     box_shadow: box_shadow,
+
+    form_input: form_input,
 
     text: {
       primary: {
@@ -200,6 +241,7 @@ const VariablesContextProvider = (props) => {
     footer_mobile: footer_mobile,
     row: row,
     col_6: col_6,
+    col_12: col_12,
   });
   return <VariablesContext.Provider value={{ variables }}>{props.children}</VariablesContext.Provider>;
 };

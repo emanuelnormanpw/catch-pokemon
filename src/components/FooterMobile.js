@@ -12,33 +12,62 @@ const NavbarPoke = () => {
         ${variables.footer_mobile}
       `}
     >
-      <Link to="/">
+      <div
+        className={css`
+          display: flex;
+          justify-content: center;
+          width: 100%;
+          color: #f7cc19;
+          font-weight: bold;
+        `}
+      >
         <div
           className={css`
+            margin: 16px;
+            padding: 10px;
+            border-radius: 50px;
+            width: 100%;
+            height: 50px;
+            background-color: ${variables.primary};
             display: flex;
             justify-content: center;
-            width: 100%;
-            color: #f7cc19;
-            font-weight: bold;
+            align-items: center;
           `}
         >
-          <div
+          <Link
+            to="/"
             className={css`
-              margin-bottom: 16px;
-              padding: 10px;
-              border-radius: 50px;
-              width: 50px;
-              height: 50px;
-              background-color: green;
-              box-shadow: 0px 0px 10px 8px #f5c600;
-              display: flex;
-              justify-content: center;
+              width: 50%;
             `}
           >
-            <img src={process.env.PUBLIC_URL + "/images/pokemon-logo.png"} alt="" />
-          </div>
+            <div>
+              <img
+                className={css`
+                  width: 28px;
+                `}
+                src={process.env.PUBLIC_URL + "/images/pokeball_icon.svg"}
+                alt=""
+              />
+            </div>
+          </Link>
+          <Link
+            to="/inventory"
+            className={css`
+              width: 50%;
+            `}
+          >
+            <div>
+              <img
+                className={css`
+                  width: 28px;
+                `}
+                src={process.env.PUBLIC_URL + "/images/bag.svg"}
+                alt=""
+              />
+            </div>
+          </Link>
         </div>
-      </Link>
+      </div>
     </div>
   );
 };
