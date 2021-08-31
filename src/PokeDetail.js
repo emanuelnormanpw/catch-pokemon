@@ -35,6 +35,7 @@ const PokeDetail = (props) => {
   const [loading_catch, setLoadingCatch] = useState(false);
   const [isCatch, setIsCatch] = useState(false);
   const [namePokemon, setNamePokemon] = useState("");
+  const [errMsg, setErrMsg] = useState("");
   // const [localData, setlocalData] = useState();
   const { pokename, idPokemon } = useParams();
   const { variables } = useContext(VariablesContext);
@@ -76,13 +77,22 @@ const PokeDetail = (props) => {
     if (localStrorage === null) {
       arr.push(name);
       localStorage.setItem("data", JSON.stringify(arr));
+      history.push("/");
     } else {
-      arr = JSON.parse(localStorage.getItem("data"));
-      arr.push(name);
-      localStorage.setItem("data", JSON.stringify(arr));
-    }
+      // Find Duplicate Nickname
+      let findDuplicateName = localStrorage.find(({ name }) => name === namePokemon);
+      let findDuplicateType = localStrorage.find(({ pokeType }) => pokeType === pokename);
 
-    history.push("/");
+      if (findDuplicateName && findDuplicateType) {
+        setErrMsg("Nickname is already taken");
+      } else {
+        setErrMsg("");
+        arr = JSON.parse(localStorage.getItem("data"));
+        arr.push(name);
+        localStorage.setItem("data", JSON.stringify(arr));
+        history.push("/");
+      }
+    }
   };
 
   if (loading)
@@ -178,6 +188,13 @@ const PokeDetail = (props) => {
                 onChange={(e) => setNamePokemon(e.target.value)}
               />
             </div>
+            <h4
+              className={css`
+                color: red;
+              `}
+            >
+              {errMsg ? errMsg : ""}
+            </h4>
             <button
               className={css`
                 ${variables.btn_mobile}
