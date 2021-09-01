@@ -36,6 +36,7 @@ const PokeDetail = (props) => {
   const [isCatch, setIsCatch] = useState(false);
   const [namePokemon, setNamePokemon] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [catchMessage, setCatchMessage] = useState(false);
   // const [localData, setlocalData] = useState();
   const { pokename, idPokemon } = useParams();
   const { variables } = useContext(VariablesContext);
@@ -51,11 +52,13 @@ const PokeDetail = (props) => {
 
   const catchPokemon = () => {
     setLoadingCatch(true);
+    setCatchMessage(false);
     const rand = Math.random();
     if (rand > 0.5) {
       setIsCatch(true);
     } else {
       setIsCatch(false);
+      setCatchMessage(true);
     }
   };
 
@@ -232,6 +235,19 @@ const PokeDetail = (props) => {
             ${variables.container}
           `}
         >
+          {catchMessage && (
+            <div
+              className={css`
+                padding: 8px 0px;
+                margin-bottom: 8px;
+                width: 100%;
+                background-color: pink;
+                border-radius: 6px;
+              `}
+            >
+              Oops! Fail to catch pokemon
+            </div>
+          )}
           <div
             className={css`
               ${variables.box_shadow}
